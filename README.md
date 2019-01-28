@@ -20,6 +20,7 @@ MP3Cutter.cut({
 
 ### Method
 ##### ```cut(Object options)```
+##### ```outputBuffer cutBuffer(Object options)```
 
 #### Options
 
@@ -28,6 +29,9 @@ Path to the file to be cut.
 
 ##### ```target {String}```
 Path of the output file.
+
+##### ```buffer {Buffer}```
+Buffer object of audio file.
 
 ##### ```start {Number}```
 Start position in seconds.

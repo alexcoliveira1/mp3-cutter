@@ -1,4 +1,4 @@
-const fs = require('fs');
+// const fs = require('fs');
 
 const versions = ['2.5', 'x', '2', '1'],
       layers = ['x', '3', '2', '1'],
@@ -50,24 +50,21 @@ class Duration {
      * @param {String} filename 
      * @returns {Number}
      */
-    static getDuration(filename) {
-        var fd = fs.openSync(filename, 'r'),
-            buffer = new Buffer(100),
-            block = fs.readSync(fd, buffer, 0, 100, 0),
-            stat = fs.statSync(filename),
+    static getDuration(fileBuffer) {
+        var buffer = fileBuffer.slice(0, 100),
+            statSize = fileBuffer.length,
             duration = 0;
-
         try {
             calculateDuration: {
-                if(block < 100) {
+                if(buffer.length < 100) {
                     break calculateDuration;
                 }
 
                 var offset = this.skipID3v2Tag(buffer);
-                while(offset < stat.size) {
-                    block = fs.readSync(fd, buffer, 0, 10, offset);
+                while(offset < statSize) {
+                    buffer = fileBuffer.slice(offset, offset+10)
           
-                    if(block < 10) {
+                    if(buffer.length < 10) {
                         break calculateDuration;
                     } else if(buffer[0] == 255 && buffer[1] & 224) {
                         var info = this.parseFrameHeader(buffer);
@@ -87,8 +84,6 @@ class Duration {
             }
         } catch(e) {
             console.error(e);
-        } finally {
-            fs.closeSync(fd);
         }
 
         return parseFloat(duration.toFixed(2));            
