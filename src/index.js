@@ -53,6 +53,15 @@ class MP3Cutter {
         }
     }
 
+    /**
+     * Returns the audio duration in seconds
+     * 
+     * @param buffer:Buffer 
+     */
+    static getDuration(buffer) {
+      return Duration.getDuration(buffer);
+    }
+
 }
 
 module.exports = MP3Cutter;
